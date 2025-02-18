@@ -1,3 +1,6 @@
 theme: jekyll-theme-slate
-title: Nehemias's homepage
-description: Nehemias Feliz personal webpage
+title: Nehemias Feliz Ferreras
+description: Personal website
+github:
+  is_project_page: true
+  repository_url: https://github.com/juniornff/juniornff.github.io
