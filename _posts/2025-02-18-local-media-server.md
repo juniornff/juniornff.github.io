@@ -20,7 +20,7 @@ I used [Docker](https://www.docker.com/) since I wanted to learn how to use it. 
 
 # Setting up Local environment
 
-After a clean installation of Debian, I set a fixed IP on my local network. After installing Docker I learned how to allow it to access devices such as USB in a comfortable way, I created a docker compose file with the necessary configurations to download and start the server. After doing the initial configuration of Jellyfin and setting up the media library, I could already access it from any device within the network with the local IP and port. First achievement
+After a clean installation of Debian, I set a static IP on my local network. After installing Docker I learned how to allow it to access devices such as USB in a easy way, I created a docker compose file with the necessary configurations to download and start the server. After doing the initial configuration of Jellyfin and setting up the media library, I could already access it from any device within the network with the local IP and port. First achievement
 
 # First attempt to go online
 
@@ -39,4 +39,5 @@ So I decided to keep investigating...
 The research led me to this [Youtube](https://youtu.be/ey4u7OUAF3c?si=iqb3qRVzkVIa4Uk1) video, where I learned about Cloudflare and their tunneling system, and after understanding well how the process would be, I had to buy a domain, since although Cloudflare provided what I needed (HTTPS and DDOS protection) for free, I could not continue using DuckDNS, so I had to buy a domain, Cloudflare allows you to buy domains, which made the process of setting it up much easier. After that I simply had to install the tunnel in docker, and thus be able to create subdomains/routes that link to IP addresses on my local network, said subdomains/routes being accessed through HTTPS by SSL certificates without having to open/expose any ports on my router
 
 And with that now, I can say that for now, I have completed the project.
-[Site](https://media.nehemiasfeliz.com/)
+
+[THE PROYECT](https://media.nehemiasfeliz.com/)
