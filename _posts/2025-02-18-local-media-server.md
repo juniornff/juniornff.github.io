@@ -135,7 +135,7 @@ Plan the migration to the new computer taking into account the recommendations/t
 
 Implement [LDAP Authentication](https://jellyfin.org/docs/general/server/plugins/#ldap) for the automatic management of new users with default options, thus facilitating access to new users with whom you share the project.
 
-Considering the future change of equipment, I plan to use [proxmox](https://www.proxmox.com/en/) to be able to use the equipment for more projects.
+Considering the future change of computer, I plan to use [proxmox](https://www.proxmox.com/en/) to be able to use that power for more projects.
 
 # Conclutions
 
