@@ -18,6 +18,21 @@ Since I wanted it to be local, I decided to use an old laptop I have at home (A 
 
 I used [Docker](https://www.docker.com/) since I wanted to learn how to use it. As a media server I decided to use [Jellyfin](https://jellyfin.org/) since it is open source. To access data remotely while on the network use [Samba](https://www.samba.org/samba/). In order to publish it on the web at the beginning I used [duckdns](https://www.duckdns.org/) and [port forwarding](https://portforward.com/). Then I decided to purchase a [domain](https://nehemiasfeliz.com/) and set up a tunnel using [Cloudflare](https://www.cloudflare.com/es-es/) for more security.
 
+You can take a look to [the project](https://media.nehemiasfeliz.com/):
+
+Username: Guest
+
+Password: 1234
+
+```
+Notes:
+Since this is a small, personal project, not a streaming service, I've limited the Guest user as follows:
+- Only a small portion of content can be accessed
+- Only 10 simultaneous sessions allowed
+- Limit internet streaming bitrate (Mbps) to 1
+- Periodically I will log out and change the user's password
+```
+
 ![proyect](/assets/images/posts/localmediaserver/proyect.png)
 
 # Setting up Local environment
@@ -26,7 +41,7 @@ After a clean installation of Debian, I set a static IP on my local network. Aft
 
 ![dockerjellyfin](/assets/images/posts/localmediaserver/dockerjellyfin.png)
 
-After doing the initial configuration of Jellyfin and setting up the media library, I could already access it from any device within the network with the local IP and port. First achievement
+After doing the initial configuration of Jellyfin and setting up the media library, I could already access it from any device within the network with the local IP and port. First achievement.
 
 ![localip](/assets/images/posts/localmediaserver/localip.png)
 
@@ -62,7 +77,7 @@ So I decided to keep investigating...
 
 # Using the proper technologies
 
-The research led me to learned about Cloudflare
+The research led me to learned about Cloudflare.
 
 <img src="/assets/images/posts/localmediaserver/Cloudflare_Logo.svg" width="50%" height="50%">
 
@@ -70,7 +85,7 @@ After understanding well how the process would be, I had to buy a domain, since 
 
 ![mydomain](/assets/images/posts/localmediaserver/mydomain.png)
 
-The next thing to implement was their tunneling system
+The next thing to implement was their tunneling system.
 
 ### Cloudflare Tunnels
 Definition:
@@ -84,24 +99,44 @@ Cloudflare provides several ways to install these tunnels, as you can imagine I 
 
 ![cloudflaretunnelinstaled](/assets/images/posts/localmediaserver/cloudflaretunnellinstaled.png)
 
-Whit that i'm be able to create subdomains/routes that link to IP addresses on my local network, said subdomains/routes being accessed through HTTPS by SSL certificates without having to open/expose any ports on my router
+Whit that i'm be able to create subdomains/routes that link to IP addresses on my local network, said subdomains/routes being accessed through HTTPS by SSL certificates without having to open/expose any ports on my router.
 
 ![cloudflaretunnellinked](/assets/images/posts/localmediaserver/cloudflaretunnellinked.png)
 
-And with that, now I can say that for now, I have completed the project. A local media server for me, my family and friends
+And with that, now I can say that for now, I have completed the project. A local media server for me, my family and friends.
 
 ![medianehemias](/assets/images/posts/localmediaserver/medianehemias.png)
 
 ![sslcertificate](/assets/images/posts/localmediaserver/sslcertificate.png)
 
+# Future plans and limitations
+
+### Problems and Limitations
+
+The main limitation of the project is its low processing capacity due to the hardware, poor physical protection of the data and scalability.
+
+Processes such as scanning the library, extracting information from files or transcoding when transmitting take up all the capacity of the CPU, making its use very limited to simply being a very basic media player, not taking advantage of all the options that Jellyfin has.
+
+Using an external USB as a storage medium is a simple implementation, but I know that it does not have the best read/write times and that when exposed it runs the risk of being disconnected/damaged by many factors and the loss of information that this entails.
+
+Mention that since it is an old laptop, its battery is not working, so it depends exclusively on its charging cable, making any power outage cause the computer to shut down immediately.
+
+### Solutions
+
+The primary solution is not to depend on external power, buy a battery replacement and provide a UPS for any power outage.
+
+The next long-term solution will be to change the computer to one with more processing capacity, increase storage with dedicated SSDs (possibly implementing RAID for more reliability) and maybe use [proxmox](https://www.proxmox.com/en/) to be able to use the equipment for more projects.
+
+### Future plans
+
+Implement [Bakcups](https://jellyfin.org/docs/general/administration/backup-and-restore) with periodic information, not about the videos themselves, but about the server configuration among other data relevant to the project.
+
+Implement wake-up-lan so that in case of a power failure or sudden shutdown, the laptop can be turned on remotely.
+
+Plan the migration to the new computer taking into account the recommendations/tools proposed by the [documentation](https://jellyfin.org/docs/general/administration/migrate).
+
+Implement [LDAP Authentication](https://jellyfin.org/docs/general/server/plugins/#ldap) for the automatic management of new users with default options, thus facilitating access to new users with whom you share the project.
+
 # Conclutions
 
 The best thing about working in this industry is that any project you want to make, whether for personal or professional use, involves setting challenges and learning new technologies that will surely be useful for your next job or work project.
-
-To finish, I'll give you a look at my project:
-
-[THE PROJECT](https://media.nehemiasfeliz.com/)
-
-Username: Guest
-
-Password: 1234
