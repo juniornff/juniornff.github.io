@@ -547,6 +547,20 @@ Small Device Styles
   background: white;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 15px auto;
+    border: 1px solid #eee;
+    box-sizing: border-box;
+  }
+  
+  p img {
+    display: block;
+    margin: 15px auto;
+  }
 }
 
 .toc-sidebar {
@@ -620,6 +634,18 @@ Small Device Styles
   
   .post-content-container {
     flex-direction: column;
+    
+    .toc-sidebar {
+      order: 1;
+    }
+    
+    .post-content {
+      order: 2;
+    }
+  }
+  
+  .posts-sidebar {
+    order: 3;
   }
   
   .post-content,
