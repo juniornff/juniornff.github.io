@@ -572,3 +572,115 @@ Small Device Styles
     width: 100%;
   }
 }
+
+/* POST LAYOUT */
+.post-layout .inner {
+  max-width: 100% !important;
+  padding: 20px;
+}
+
+.post-container {
+  display: flex;
+  gap: 30px;
+}
+
+.posts-sidebar {
+  width: 25%;
+  padding: 15px;
+  background: #f8f8f8;
+  border-radius: 5px;
+  
+  ul {
+    padding-left: 20px;
+    list-style: disc;
+  }
+  
+  li {
+    margin-bottom: 10px;
+  }
+}
+
+.post-content-container {
+  width: 75%;
+  display: flex;
+  gap: 20px;
+}
+
+.post-content {
+  width: 70%;
+}
+
+.toc-sidebar {
+  width: 30%;
+  padding: 15px;
+  background: #f0f0f0;
+  border-radius: 5px;
+  align-self: flex-start;
+  position: sticky;
+  top: 20px;
+  
+  .toc {
+    ul {
+      padding-left: 20px;
+      list-style: circle;
+    }
+    
+    li {
+      margin: 5px 0;
+    }
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+  .post-container {
+    flex-direction: column;
+  }
+  
+  .posts-sidebar,
+  .post-content-container {
+    width: 100%;
+  }
+  
+  .post-content-container {
+    flex-direction: column;
+  }
+  
+  .post-content,
+  .toc-sidebar {
+    width: 100%;
+  }
+  
+  .toc-sidebar {
+    position: static;
+  }
+}
+
+/* POSTS LISTING */
+.posts-listing {
+  .post-item {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    
+    h3 {
+      margin-bottom: 5px;
+    }
+    
+    small {
+      color: #777;
+      font-size: 0.9em;
+    }
+  }
+}
+
+/* TOC ITEMS */
+.toc-item {
+  margin: 5px 0;
+  
+  &[data-level="2"] { padding-left: 0; }
+  &[data-level="3"] { padding-left: 20px; }
+  &[data-level="4"] { padding-left: 40px; }
+  &[data-level="5"] { padding-left: 60px; }
+  &[data-level="6"] { padding-left: 80px; }
+}

@@ -6,11 +6,11 @@ permalink: /posts
 
 # Publicaciones
 
-<ul class="posts-list">
+<div class="posts-listing">
   {% for post in site.posts %}
-    <li>
-      <a href="{{ post.url }}">{{ post.title }}</a>
+    <div class="post-item">
+      <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
       <small>{{ post.date | date: "%b %d, %Y" }}</small>
-    </li>
+    </div>
   {% endfor %}
-</ul>
+</div>
