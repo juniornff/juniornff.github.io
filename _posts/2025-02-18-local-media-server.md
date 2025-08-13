@@ -2,7 +2,7 @@
 layout: post
 title: "Local Media Server"
 date: 2025-02-18 14:15:00 -0000
-categories: Personal-Projects Containers Cloudflare DNS Self-Hosting
+categories: Personal-Projects Docker Containers Cloudflare DNS Jellyfin Self-Hosting
 permalink: /posts/local-media-server
 ---
 
