@@ -505,87 +505,22 @@ Small Device Styles
 }
 
 /* POST LAYOUT */
-.post-container {
-  display: flex;
-  gap: 30px;
-}
-
-.post-sidebar {
-  width: 25%;
-  padding: 15px;
-  background: #f8f8f8;
-  border-radius: 5px;
-  
-  ul {
-    padding-left: 20px;
-    list-style: disc;
-  }
-  
-  li {
-    margin-bottom: 10px;
-  }
-}
-
-.post-content {
-  width: 75%;
-}
-
-.toc-container {
-  background: #f0f0f0;
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  
-  .toc {
-    ul {
-      padding-left: 20px;
-      list-style: circle;
-    }
-    
-    li {
-      margin: 5px 0;
-    }
-  }
-}
-
-/* POSTS LISTING */
-.posts-list li {
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
-  
-  small {
-    display: block;
-    color: #777;
-    margin-top: 5px;
-  }
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .post-container {
-    flex-direction: column;
-  }
-  
-  .post-sidebar,
-  .post-content {
-    width: 100%;
-  }
-}
-
-/* POST LAYOUT */
-.post-layout .inner {
+#main_content.post-layout {
   max-width: 100% !important;
-  padding: 20px;
+  padding: 0;
+  margin: 0;
 }
 
 .post-container {
   display: flex;
   gap: 30px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .posts-sidebar {
-  width: 25%;
+  width: 20%;
   padding: 15px;
   background: #f8f8f8;
   border-radius: 5px;
@@ -601,13 +536,17 @@ Small Device Styles
 }
 
 .post-content-container {
-  width: 75%;
+  width: 80%;
   display: flex;
   gap: 20px;
 }
 
 .post-content {
   width: 70%;
+  padding: 15px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 .toc-sidebar {
@@ -631,29 +570,15 @@ Small Device Styles
   }
 }
 
-/* RESPONSIVE */
-@media (max-width: 992px) {
-  .post-container {
-    flex-direction: column;
-  }
+/* TOC ITEMS */
+.toc-item {
+  margin: 5px 0;
   
-  .posts-sidebar,
-  .post-content-container {
-    width: 100%;
-  }
-  
-  .post-content-container {
-    flex-direction: column;
-  }
-  
-  .post-content,
-  .toc-sidebar {
-    width: 100%;
-  }
-  
-  .toc-sidebar {
-    position: static;
-  }
+  &[data-level="2"] { padding-left: 0; }
+  &[data-level="3"] { padding-left: 20px; }
+  &[data-level="4"] { padding-left: 40px; }
+  &[data-level="5"] { padding-left: 60px; }
+  &[data-level="6"] { padding-left: 80px; }
 }
 
 /* POSTS LISTING */
@@ -674,13 +599,35 @@ Small Device Styles
   }
 }
 
-/* TOC ITEMS */
-.toc-item {
-  margin: 5px 0;
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+  .post-container {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 992px) {
+  .post-container {
+    flex-direction: column;
+    gap: 20px;
+  }
   
-  &[data-level="2"] { padding-left: 0; }
-  &[data-level="3"] { padding-left: 20px; }
-  &[data-level="4"] { padding-left: 40px; }
-  &[data-level="5"] { padding-left: 60px; }
-  &[data-level="6"] { padding-left: 80px; }
+  .posts-sidebar,
+  .post-content-container {
+    width: 100%;
+  }
+  
+  .post-content-container {
+    flex-direction: column;
+  }
+  
+  .post-content,
+  .toc-sidebar {
+    width: 100%;
+  }
+  
+  .toc-sidebar {
+    position: static;
+  }
 }
