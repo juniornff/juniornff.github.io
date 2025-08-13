@@ -28,6 +28,11 @@ permalink: /posts
   <aside class="categories-sidebar">
     <h3>Categorías</h3>
     <ul id="categories-list">
+      <li>
+        <a href="#" onclick="clearFilter(); return false;">
+          <strong>Mostrar todas</strong>
+        </a>
+      </li>
       {% assign categories = site.categories | sort %}
       {% for category in categories %}
         {% assign category_name = category[0] %}
@@ -40,11 +45,6 @@ permalink: /posts
           <span>({{ category[1].size }})</span>
         </li>
       {% endfor %}
-      <li>
-        <a href="#" onclick="clearFilter(); return false;">
-          <strong>Mostrar todas</strong>
-        </a>
-      </li>
     </ul>
   </aside>
 </div>
