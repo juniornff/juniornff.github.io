@@ -8,3 +8,6 @@ collections:
   posts:
     output: true
     permalink: /posts/:path/
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap

@@ -46,7 +46,11 @@
             <article class="post-content">
               <div class="post-categories">
                 {% for category in page.categories %}
-                  <span class="category-tag"><a href="/posts#{{ category }}">{{ category }}</a></span>
+                  <span class="category-tag">
+                    <a href="/posts?category={{ category | downcase | replace: ' ', '-' }}">
+                      {{ category }}
+                    </a>
+                  </span>
                 {% endfor %}
               </div>
               
