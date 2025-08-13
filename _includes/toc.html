@@ -1,0 +1,14 @@
+<nav class="toc">
+  {% assign headers = include.html | split: '<h' %}
+  <ul>
+    {% for header in headers %}
+      {% if header contains 'id=' %}
+        {% assign first = header | split: '>' | first %}
+        {% assign hlevel = first | replace: '"', '' | replace: "'", "" | split: 'id=' %}
+        {% assign hid = hlevel[1] | split: ' ' | first %}
+        {% assign htext = header | split: '</h' | first | split: '>' | last | strip_html %}
+        <li><a href="#{{ hid }}">{{ htext }}</a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</nav>

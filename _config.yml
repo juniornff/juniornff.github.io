@@ -4,3 +4,7 @@ description: Personal website
 github:
   is_project_page: true
   repository_url: https://github.com/juniornff/juniornff.github.io
+collections:
+  posts:
+    output: true
+    permalink: /posts/:path/

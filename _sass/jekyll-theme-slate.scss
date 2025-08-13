@@ -486,3 +486,89 @@ Small Device Styles
   }
 
 }
+
+/* NAVIGATION */
+#main-nav {
+  margin: 15px 0;
+  a {
+    margin-right: 15px;
+    padding: 5px 10px;
+    background: #333;
+    color: #fff !important;
+    border-radius: 3px;
+    
+    &:hover {
+      background: #0F79D0;
+      text-decoration: none;
+    }
+  }
+}
+
+/* POST LAYOUT */
+.post-container {
+  display: flex;
+  gap: 30px;
+}
+
+.post-sidebar {
+  width: 25%;
+  padding: 15px;
+  background: #f8f8f8;
+  border-radius: 5px;
+  
+  ul {
+    padding-left: 20px;
+    list-style: disc;
+  }
+  
+  li {
+    margin-bottom: 10px;
+  }
+}
+
+.post-content {
+  width: 75%;
+}
+
+.toc-container {
+  background: #f0f0f0;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  
+  .toc {
+    ul {
+      padding-left: 20px;
+      list-style: circle;
+    }
+    
+    li {
+      margin: 5px 0;
+    }
+  }
+}
+
+/* POSTS LISTING */
+.posts-list li {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  
+  small {
+    display: block;
+    color: #777;
+    margin-top: 5px;
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .post-container {
+    flex-direction: column;
+  }
+  
+  .post-sidebar,
+  .post-content {
+    width: 100%;
+  }
+}
