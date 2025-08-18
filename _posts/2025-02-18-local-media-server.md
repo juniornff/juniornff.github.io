@@ -12,6 +12,8 @@ I have always preferred to store my content locally, Until now, I used a USB to 
 
 # The project
 
+[Second Part](/posts/local-media-server-2)
+
 Since I wanted it to be local, I decided to use an old laptop I have at home (A Samsung with an Intel Core i3, 8 GB RAM, 240 GB SSD) as a local server using [Debian](https://www.debian.org/) as the OS and the 1TB USB as extra storage.
 
 I used [Docker](https://www.docker.com/) since I wanted to learn how to use it. As a media server I decided to use [Jellyfin](https://jellyfin.org/) since it is open source. To access data remotely within the network, I used [Samba](https://www.samba.org/samba/). In order to publish it on the web at the beginning, I used [duckdns](https://www.duckdns.org/) and [port forwarding](https://portforward.com/). Then I decided to purchase a [domain](https://nehemiasfeliz.com/) and set up a tunnel using [Cloudflare](https://www.cloudflare.com/es-es/) for more security.
