@@ -176,7 +176,9 @@ But a problem arises when trying to integrate this with **Docker Desktop**.
 
 Docker allows you to install a GUI to manage containers/images/volumes, called [Docker Desktop](https://docs.docker.com/desktop/), which is what I had been using until now. However, according to its documentation, installing Docker Desktop creates a [virtual machine (VM)](https://docs.docker.com/desktop/setup/install/linux/#:~:text=Desktop%20for%20Linux.-,Important,-Docker%20Desktop%20on). This prevents the use of devices external to that virtual machine officially, without resorting to complex and not always secure workarounds (in addition to consuming more system resources).
 
-Due to this drawback, I decided to migrate from Docker Desktop to the system-integrated version, [Docker Engine CLI](https://docs.docker.com/engine/install/debian/). The process involved backing up the volumes (data), recreating the containers, and replacing the content of the new volumes with the data from the old ones.
+Due to this drawback, I decided to migrate from Docker Desktop to the system-integrated version, [Docker Engine CLI](https://docs.docker.com/engine/install/debian/). The process involved backing up the volumes (data), recreating the containers, and replacing the content of the new volumes with the data from the old ones. With the CLI i'm able to monitor the container and more options, since then i only use the CLI
+
+![stats](/assets/images/posts/localmediaserver2/Stats.PNG)
 
 Now, with this change, the Jellyfin container can access the video driver without issues. Furthermore, it is no longer limited by the VM's constraints and operates more efficiently for the system.
 

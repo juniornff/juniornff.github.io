@@ -37,7 +37,29 @@ Since this is a small personal project and not a full-fledged streaming service,
 
 # Setting up Local environment
 
-After a clean installation of Debian, I set a static IP for my local network. After installing Docker, I learned how to allow it to access devices such as USB in an easy way., I created a docker compose file with the necessary configurations to download and start the server.
+After a clean installation of Debian, I set a static IP for my local network. After installing Docker, I learned how to allow it to access devices such as USB in an easy way. I created a docker compose file with the necessary configurations to download and start the server.
+
+```yaml
+# docker-compose.yml
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:10.10.7
+    container_name: jellyfin
+    user: 1000:1000
+    network_mode: 'host'
+    volumes:
+      - config:/config
+      - cache:/cache
+      - type: bind
+        source: /mnt/storage
+        target: /USB
+    restart: 'unless-stopped'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+volumes:
+  config:
+  cache:
+```
 
 ![dockerjellyfin](/assets/images/posts/localmediaserver/dockerjellyfin.png)
 
