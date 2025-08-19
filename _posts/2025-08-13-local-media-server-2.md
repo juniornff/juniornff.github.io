@@ -182,7 +182,7 @@ Due to this drawback, I decided to migrate from Docker Desktop to the system-int
 
 Now, with this change, the Jellyfin container can access the video driver without issues. Furthermore, it is no longer limited by the VM's constraints and operates more efficiently for the system.
 
-### Implementación
+### Implementation
 
 With that issue resolved, the next step is the implementation and activation of Hardware Acceleration in the Jellyfin container.
 

@@ -8,6 +8,25 @@ permalink: /posts/local-media-server-3
 
 # TODO
 
+# Shoko Server
+
+### Instaling the server
+
+### Configuring the server
+
+#### AniDB
+
+### Integrating Shoko with Jellyfin
+
+# Qbittorrnet
+
+### Automation of new episodes of the series currently being broadcast
+
+# Unifying different folders into one
+
+# Access servers/services directly without leaving the local network
+
+
 I need to talk about the changes that have been made in the media server
 * The implementation and integration of Shoko Server for the managing of anime series
 * Automating the import/download of new files for use in Shoko/Jellyfin by torrent
