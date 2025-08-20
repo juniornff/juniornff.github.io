@@ -113,31 +113,33 @@ After the restart we access *Dashboard -> My plugins -> Shokofin (the 3 points) 
 
 Shoko's [documentation](https://docs.shokoanime.com/jellyfin/configuring-shokofin) explains all the plugin's options quite well. But to simplify things, I'll explain the options I selected to adapt it to my needs.
 
-![ShokofinConfig1](/assets/images/posts/localmediaserver3/ShokofinConfig1.PNG)
-
 Here I simply indicated the local IP and the port on which Shoko is working as well as the username and password for authentication.
 
-![ShokofinConfig2](/assets/images/posts/localmediaserver3/ShokofinConfig2.PNG)
+![ShokofinConfig1](/assets/images/posts/localmediaserver3/ShokofinConfig1.PNG)
 
 In this section, I've set the main title of the series/season/episode/description to be adapted to Shoko's specifications (in my case, Spanish/English/Romanji) and the alternate title to be decided by AniDB (mainly Romanji). I've also set useful links.
 
-![ShokofinConfig3](/assets/images/posts/localmediaserver3/ShokofinConfig3.PNG)
+![ShokofinConfig2](/assets/images/posts/localmediaserver3/ShokofinConfig2.PNG)
 
 In this section, the most important thing is to enable [VFS](https://en.wikipedia.org/wiki/Virtual_file_system) for libraries created using Shokofin. The plugin itself describes what it consists of:
 > Enabling this feature allows you to disregard the underlying disk file structure while automagically meeting Jellyfin's requirements for file organization. It also ensures that no unrecognized files appear in your library and allows us to fully leverage Jellyfin's native features better than we otherwise could without it. This enables us to effortlessly support trailers, special features, and theme videos for series, seasons and movies, as well as merge partial episodes into a single episode. All this is possible because we disregard the underlying disk file structure to create our own using symbolic links. [1](https://docs.shokoanime.com/jellyfin/configuring-shokofin#library:~:text=Use%20the%20Virtual%20File%20System)
 
-![ShokofinConfig4](/assets/images/posts/localmediaserver3/ShokofinConfig4.PNG)
+![ShokofinConfig3](/assets/images/posts/localmediaserver3/ShokofinConfig3.PNG)
 
 This section is not so interesting, but basically it is what elements are considered in the VFS
 
-![ShokofinConfig5](/assets/images/posts/localmediaserver3/ShokofinConfig5.PNG)
+![ShokofinConfig4](/assets/images/posts/localmediaserver3/ShokofinConfig4.PNG)
 
 In this section, a Jellyfin user is synchronized with a Shoko user, allowing synchronization of the progress of the episodes watched with Shoko (and Shoko with AniDB).
 
-![ShokofinConfig6](/assets/images/posts/localmediaserver3/ShokofinConfig6.PNG)
+![ShokofinConfig5](/assets/images/posts/localmediaserver3/ShokofinConfig5.PNG)
 
 For this section, I prefer to use the description from the documentation:
 > SignalR is a feature that allows for real-time communication with your running Shoko Server so that Shokofin has the ability to react to certain types of events such as file events and refresh events. This means that when Shoko Server identifies new media or updates metadata for your media, Shokofin can immediately import new or update existing media in your library. [1](https://docs.shokoanime.com/jellyfin/configuring-shokofin#signalr)
+
+![ShokofinConfig6](/assets/images/posts/localmediaserver3/ShokofinConfig6.PNG)
+
+With that we have the plugin ready to be used in the creation of libraries
 
 #### Creating a Library with Shokofin
 
