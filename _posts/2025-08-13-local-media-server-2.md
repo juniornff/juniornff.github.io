@@ -8,7 +8,7 @@ permalink: /posts/local-media-server-2
 
 Since the [first post](/posts/local-media-server) about the server, there have been several changes to the server and its environment. In the following posts, I'll explain what those changes were. 
 
-[Third Part](/posts/local-media-server-3)
+Updates have been made on the server, can read about it in the [Third](/posts/local-media-server-3) post.
 
 # From CloudFlare Tunnels to a Personal DDNS provider
 
@@ -198,7 +198,7 @@ Since we know our integrated graphics card is an Intel, we have the following me
 * QSV - Preferred on mainstream GPUs, for better performance
 * VA-API - Required by pre-Broadwell legacy GPUs, for compatibility
 
-Given that my CPU/GPU is a fairly old Intel model, I will choose VA-API.
+Given that my CPU/GPU is a fairly old Intel model, I will choose **VA-API**.
 
 For these video drivers to be used, they must first be installed on the system:
 ```bash
@@ -225,7 +225,7 @@ $ ls -l /dev/dri
 total 0
 drwxr-xr-x  2 root root         80 jul 20 10:55 by-path
 crw-rw----+ 1 root video  226,   0 jul 20 10:55 card0
-crw-rw----+ 1 root render 226, 128 jul 20 10:55 renderD128
+crw-rw----+ 1 root render 226, 128 jul 20 10:55 renderD128 # this one is the important
 
 # Confirm the Render group number
 $ getent group render | cut -d: -f3
@@ -328,7 +328,10 @@ $ sudo apt update && sudo apt install -y intel-gpu-tools
 $ sudo intel_gpu_top
 ```
 
-The GPU when no transcoding processes are being performed vs. when processes are being performed
+The GPU when no transcoding processes are being performed
 
 ![idle](/assets/images/posts/localmediaserver2/indle.PNG)
+
+vs. when processes are being performed
+
 ![on_use](/assets/images/posts/localmediaserver2/on_use.PNG)
