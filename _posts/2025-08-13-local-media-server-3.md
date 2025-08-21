@@ -213,12 +213,283 @@ The second is automatic torrent [downloading from RSS feeds](https://en.wikipedi
 
 With that, at the start of each anime season, I simply configure the RSS feeds and their rules to automatically download the new episodes, making them available for Shoko/Jellyfin.
 
+#### Accessing from anywhere
+
+Finally, the last Qbittorrent feature I use is the ability to manage the program through the browser. Since I already have my DDNS provider and reverse proxy set up (explained in the [second post](/posts/local-media-server-2)), I decided to create its own subdomain to make it accessible over the internet(I also did it for Shoko's WebGUI).
+
+```json
+{
+# config.json for the DDNS container
+  "cloudflare": [
+    {
+      "authentication": {
+        "api_token": <CLOUDFLARE API TOKEN>
+      },
+      "zone_id": <CLOUDFLARE ZONE ID>,
+      "subdomains": [
+        { "name": "media", "proxied": true },
+        { "name": "shoko", "proxied": true },
+        { "name": "torrents", "proxied": true }
+      ]
+    }
+  ],
+  "a": true,
+  "aaaa": true,
+  "purgeUnknownRecords": false,
+  "ttl": 300
+}
+```
+
+```caddyfile
+# Caddyfile
+:80 {
+  redir https://{host}{uri} permanent
+}
+
+media.nehemiasfeliz.com {
+    tls /etc/caddy/cloudflare-origin/cert.pem /etc/caddy/cloudflare-origin/key.pem
+    reverse_proxy 192.168.1.19:8096
+}
+
+shoko.nehemiasfeliz.com {
+    tls /etc/caddy/cloudflare-origin/cert.pem /etc/caddy/cloudflare-origin/key.pem
+    reverse_proxy 192.168.1.19:8111
+}
+
+torrents.nehemiasfeliz.com {
+    tls /etc/caddy/cloudflare-origin/cert.pem /etc/caddy/cloudflare-origin/key.pem
+    reverse_proxy 192.168.1.19:8090
+}
+```
+
+![QbittorrentWebGUI](/assets/images/posts/localmediaserver3/QbittorrentWebGUI.PNG)
+
+# Summary/Diagram of the project
+
+Below I present a diagram that represents how everything configured on Jellyfin/Shoko is currently configured/works.
+
+![Diagram](/assets/images/posts/localmediaserver3/Project%20Self-Hosting%20-%20Anime%20V2.svg)
+
 # Unifying different folders into one
+
+Until now, every time I specify the directory where the content to consume is located for Jellyfin, Shoko, and Qbittorrent, I specify the location `/mnt/storage`. But that wasn't always the case.
+
+As I mentioned in the [first post](/posts/local-media-server), the initial components for the project were a laptop (with a 256GB SSD) and a 1TB USB drive. Initially, I simply instructed the containers/programs to use the folder where the USB drive was mounted: `/media/user/USB`, since I only planned to use the USB drive at the time, as I had "plenty" of space.
+
+When the available space on the USB drive started to dwindle, I installed a 500GB HDD (it was installed where the DVD drive was using an [adapter](https://www.amazon.com/dp/B01MRI8YFN)) that I had available to increase the available space. But I didn't have much thought about how to "increase" the available space. So I simply added another volume to the containers and managed the libraries by instructing them to read from two different locations. Here's how the containers looked at that point:
+
+```yaml
+    volumes:
+      - type: bind
+        source: /media/user/USB
+        target: /USB
+      - type: bind
+        source: /media/user/HDD
+        target: /HDD
+```
+
+When "once again" the available space was dwindling, I considered adding a folder to the Home directory (for example `/home/user/Videos/Animes`). But seeing the pattern that was forming, I decided to investigate how to "unify" the different dedicated locations into a single one, so that every time I want to add another drive, I don't have to add another mount to the container, but rather add that new drive to the unified location.
+
+### Lookging for solutions
+
+The implementation of [RAID](https://es.wikipedia.org/wiki/RAID) was considered, but not implemented for the following reasons:
+* **Formatting**: Implementing RAID on the hard drive/USB requires formatting the drives to configure them. However, I simply don't have the space to back up the data on the drives.
+* **Data loss**: Remember that a large part of the storage is a USB drive attached to the laptop. An external factor that disconnects the USB drive could cause total data loss (depending on the RAID level).
+* **Reduction of available space**: The main advantage of RAID is data redundancy (starting with RAID 1), meaning that even if a drive fails or is disconnected, the data is not affected in the first instance. But all of this comes at the cost of reducing the total space of the combined drives, as I only have ~1.5 TB (1 TB + 500 GB) making the most of that space is a priority.
+
+It could be said that using RAID 0 could solve the third problem, and while that's true, it doesn't solve the other two problems, which are even more critical.
+
+After some research, we decided to use [MergerFS](https://github.com/trapexit/mergerfs), which is similar to a logical (virtual) RAID 0, but instead of allowing data to be striped across disks, files are saved entirely on a single disk in the array. An example is provided on GitHub:
+
+```console
+A         +      B        =       C
+/disk1           /disk2           /merged
+|                |                |
++-- /dir1        +-- /dir1        +-- /dir1
+|   |            |   |            |   |
+|   +-- file1    |   +-- file2    |   +-- file1
+|                |   +-- file3    |   +-- file2
++-- /dir2        |                |   +-- file3
+|   |            +-- /dir3        |
+|   +-- file4        |            +-- /dir2
+|                     +-- file5   |   |
++-- file6                         |   +-- file4
+                                  |
+                                  +-- /dir3
+                                  |   |
+                                  |   +-- file5
+                                  |
+                                  +-- file6
+```
+
+It clearly has limitations compared to RAID. One of them is that it doesn't allow saving files larger than the free space on any of the disks, because the file must fit entirely on one disk, since it doesn't stripe them.
+
+But that's a case I'm willing to accept. Plus, we have the advantage that if the USB drive is disconnected, the drive join is simply disabled, and the files remain available when the USB drive is reconnected. It also allows you to add more drives to the join simply by adding their locations to the list of locations to join.
+
+Later, when I acquire a large number of drives with good capacity (four 16 TB drives, for example), I will consider using RAID on the server.
+
+### Implementation
+
+For the implementation, it was simply a matter of shutting down the containers/programs, modifying the fstab file to mount the USB/Disk and then merging with mergerFS at system startup (to avoid problems), recreating the containers/programs and making the necessary adjustments.
+
+```bash
+# /etc/fstab
+
+# Mounting for secondary HDD (sda1)
+UUID=C60C9F3B0C9F2609 /media/user/HDD ntfs-3g uid=user,gid=user,dmask=000,fmask=111,auto,rw,nofail 0 0
+
+# Mount for USB (sdc1)
+UUID=6AF2EC35F2EC06E3 /media/user/USB ntfs-3g uid=user,gid=user,dmask=000,fmask=111,auto,rw,nofail 0 0
+
+# MergerFS Assembly
+/media/user/USB:/media/user/HDD:/home/user/Vídeos/Animes  /mnt/storage  fuse.mergerfs  defaults,allow_other,category.create=ff,minfreespace=1G,x-systemd.requires=/media/user/USB,x-systemd.requires=/media/user/HDD,x-systemd.automount  0  0
+```
+
+Explaining a little some MergerFS mounting options
+* **category.create=ff**: MergerFS will always choose the disk with the most free space available at write time.
+* **minfreespace=1G**: Prevents writing to disks with less than 1GB free.
+* **x-systemd.requires=/media/user/...**: Ensures that MergerFS is mounted after individual disks are mounted.
+
 
 # Access servers/services directly without leaving the local network
 
-notes:
-I need to talk about the changes that have been made in the media server
-* Automating the import/download of new files for use in Shoko/Jellyfin by Qbittorrent/Direct Download
-* Unifying different folders into one for easier access and scalability
-* Implementing a personal DNS/reverse proxy to redirect requests to Jellyfin/Shoko directly to the server without leaving the local network
+The latest change/improvement I've made isn't so much to the servers/services, but to how I access them.
+
+So far, regardless of the network/Wi-Fi I'm on, to access my web services using the domain nehemiasfeliz.com, the request leaves that network, goes through Cloudflare, and then to my servers. That in itself isn't a problem, and it's to be expected.
+
+My curiosity began when I accessed those servers from my home local network. It follows the same process, but when I do, the request leaves my network, then reaches my network again, then leaves my network, and then enters my network again to deliver the requested data. A bit redundant. Also, my ISP limits my internet connection to 20 Mbps/10 Mbps (which is ~4 MB/1 MB) when the router has a capacity of 100 Mbps (~10 MB), limiting file transfers.
+
+Because of this inconvenience, I decided to resolve this situation. I redirected requests to those servers directly to the laptop without leaving the local network.
+
+### Local DNS
+
+To redirect requests to subdomains, you need to configure a DNS that recognizes those subdomains and sends requests to the computer's local IP address. In this case, use [DNSmasq](https://en.wikipedia.org/wiki/Dnsmasq). Modifying dnsmasq.conf file, saving the changes, and restarting the service gives you what you're looking for:
+
+```console
+# dnsmasq.conf
+
+# Basic configuration
+interface=lo,eth0
+listen-address=127.0.0.1,192.168.1.19
+
+# Redirect only service subdomains to the local IP
+address=/media.nehemiasfeliz.com/192.168.1.19
+address=/shoko.nehemiasfeliz.com/192.168.1.19
+address=/torrents.nehemiasfeliz.com/192.168.1.19
+address=/ownfoil.nehemiasfeliz.com/192.168.1.19
+address=/guacamole.nehemiasfeliz.com/192.168.1.19
+address=/smash.nehemiasfeliz.com/192.168.1.19
+address=/xlink.nehemiasfeliz.com/192.168.1.19
+
+# The main domain(Github Pages) continues to operate normally
+server=/nehemiasfeliz.com/8.8.8.8
+server=/nehemiasfeliz.com/148.103.0.73
+
+
+# Use public DNS for everything else (the ones previously in the router)
+server=148.103.0.73
+server=8.8.8.8
+```
+
+But because my router is quite old, I can't modify the DNS used. So I have to manually enter the DNS address on the device I want to use it.
+
+![ManualDNS](/assets/images/posts/localmediaserver3/ManualDNS.jpeg)
+
+### A Caddy server for LAN
+
+As in the [second post](/posts/local-media-server-2), the DNS only indicates the IP to be redirected, so it was necessary to create a new Caddy container to handle requests based on the subdomain. Therefore, another Caddy container was created and the Docker compose file was modified.
+
+Since we are not accessing Cloudflare we do not need to use their certificates, but simply use [Let's Encrypt](https://letsencrypt.org/) certificates (integrated with Caddy) to allow access via HTTPS
+
+```caddyfile
+# caddyfile
+{
+	email juniornff@gmail.com
+	acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+	http_port  80
+  https_port 443
+	ocsp_stapling off
+}
+
+# Redirects HTTP → HTTPS
+:80 {
+	redir https://{host}:8444{uri} permanent
+}
+
+media.nehemiasfeliz.com {
+	reverse_proxy 192.168.1.19:8096
+}
+
+shoko.nehemiasfeliz.com {
+	reverse_proxy 192.168.1.19:8111
+}
+
+torrents.nehemiasfeliz.com {
+	reverse_proxy 192.168.1.19:8090
+}
+```
+
+The new container is called caddy-local. Keep in mind that since the idea is to use caddy-local by default, they should use ports 80/443, since those are the default ports for HTTP/HTTPS connections. Therefore, I modified the open ports on the router to different ones (8081/8443), as well as in the caddy-reverse container. This does not affect connections that do not use dnsmasq, so requests coming from outside will continue to use ports 80/443 without any noticeable difference.
+
+```yaml
+# dokcer-compose.yml
+services:
+  cloudflare-ddns:
+    image: timothyjmiller/cloudflare-ddns:latest
+    container_name: cloudflare-ddns
+    network_mode: "host"
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ./config.json:/config.json:ro
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy-reverse
+    ports:
+      - "8081:80"
+      - "8443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./cloudflare-origin/cert.pem:/etc/caddy/cloudflare-origin/cert.pem:ro
+      - ./cloudflare-origin/key.pem:/etc/caddy/cloudflare-origin/key.pem:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+
+  caddy-local:
+    container_name: caddy-local
+    ports:
+    - "80:80"
+    - "443:443"
+    volumes:
+      - ./Caddyfile.local:/etc/caddy/Caddyfile:ro
+      - caddy_local_data:/data
+      - caddy_local_config:/config
+    environment:
+      - CLOUDFLARE_API_TOKEN=<API_TOKEN>
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:
+  caddy_local_data:
+  caddy_local_config:
+```
+
+![NewPorts](/assets/images/posts/localmediaserver3/NewPorts.PNG)
+
+Now that everything is implemented, I can access the server from my devices without leaving the local network and taking advantage of the higher transfer speed offered by the router.
+
+### Summary/Diagram of the changes
+
+Below is a diagram that represents how everything is currently set up/working.
+
+![Diagram](/assets/images/posts/localmediaserver3/Project%20Self-Hosting%20-%20Web%20GUI%20V2.svg)
+
+# Conclusion
+
+I'll continue to make improvements to the project little by little. I recently purchased three 1 TB 3.5" HDDs and am waiting to buy a rack to add them to the storage.
+
+I've learned a lot about space management, networking, and other things. Every step leaves a lesson.
