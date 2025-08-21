@@ -151,13 +151,67 @@ In my case, I created the Show library. I indicated where the series folder is, 
 
 ![ShokoLibraryFolder](/assets/images/posts/localmediaserver3/ShokofinLibraryFolder.png)
 
-# Getting new anime series
+#### The result
+
+Now that the library is created and Jellyfin has finished obtaining all the metadata and images provided by Shoko, the library looks like this:
+
+![Library](/assets/images/posts/localmediaserver3/Library.PNG)
+
+When we enter a series, we can see its title in English, followed by its alternate title in Romanji (as we configured in Shoko/Shokofin). The description is in English because one in Spanish was not found. This is also the case with the two seasons I have, sorted in order of broadcast. Shoko also provides cover art, background images, and a logo.
+
+![Serie](/assets/images/posts/localmediaserver3/Serie.PNG)
+
+When accessing a season, we can see the title of the season in both English and Romanji, the description in Spanish this time, as well as its episodes and their descriptions.
+
+![Season](/assets/images/posts/localmediaserver3/Season.PNG)
+
+![Episode](/assets/images/posts/localmediaserver3/Episode.PNG)
+
+With this, we can complete the integration of Shoko with Jellyfin. Now let's move on to the next task: Adding content to the collection.
+
+# Getting new series
+
+Although I already have a series collection, I also want to add new ones and follow the ones that are currently airing. To do this, I can obtain new series in two different ways (I will not put any links to those sites to avoid problems.).
 
 ### Direct Download
 
-### Qbittorrnet
+Many editing/subtitling teams (mostly known as [fansubs](https://en.wikipedia.org/wiki/Fansub)) publish their work on thpublish their work on the internet and enable downloading of said files through their dedicated download servers or use sites like [Mediafire](https://www.mediafire.com/)/[Mega](https://mega.nz/)/[1Ficher](https://1fichier.com/)/Etc to host their files and place the links on their web pages.
 
-#### Automation of new episodes of the series currently being broadcast
+There's not much to explain here. I access the website, download the file to the folder where the other series are, and let Shoko take care of it.
+
+### Torrent
+
+Some time later, I discovered what the [BitTorrent](https://en.wikipedia.org/wiki/BitTorrent) network was and how several fansubs and others distributed their content over it. So, I started integrating it to get new series.
+
+The first step in using the Bittorrent network is to choose a [client/program](https://en.wikipedia.org/wiki/Comparison_of_BitTorrent_clients) that manages file downloads/uploads. Although there are several, I decided on Qbittorrent.
+
+#### Qbittorrent
+
+[Qbittorrent](https://www.qbittorrent.org/) is an open-source, cross-platform torrent client. It has several interesting features.
+
+For installation, even though it has a [Docker image](https://github.com/qbittorrent/docker-qbittorrent-nox), I prefer to install it directly on the [system](https://www.qbittorrent.org/download#linux) since I don't want to limit myself to managing it solely through the browser. However, I don't rule out migrating to the Docker image later to maintain consistency and make migrations easier.
+
+One feature allows me to create categories/subcategories for the different downloads I make. These categories establish different destinations/folders for each one. This allows me to set only torrents with the "Anime" category to download to the folder that Shoko/Jellyfin uses.
+
+![Category](/assets/images/posts/localmediaserver3/Category.PNG)![SubCategory](/assets/images/posts/localmediaserver3/SubCategory.PNG)
+
+The Bittorrent network is designed to share files between peers, so it is always expected that after you obtain the file you are also willing to share, and although not everyone shares after downloading I have decided to "[do my part](https://www.youtube.com/watch?v=RlC5DEp2EOQ)" and share the torrents that I download for at least one day or if I have already shared the same size of the file (1 GB downloaded 1 GB uploaded, this proportion is known as Ratio). Except for series/torrents that don't have many/no one sharing them, I share those indefinitely.
+
+![Ratio](/assets/images/posts/localmediaserver3/Ratio.PNG)
+
+#### Automation of new episodes of the series currently airing
+
+For series that are currently airing, manually searching for the new torrent of the week can be tedious. So I decided to implement other Qbittorrent features.
+
+The first is [RSS feed](https://en.wikipedia.org/wiki/RSS) reading, allowing me to read the RSS feeds that various websites/fansubs offer directly from Qbittorrent to download their torrents.
+
+![RSS](/assets/images/posts/localmediaserver3/RSS.PNG)
+
+The second is automatic torrent [downloading from RSS feeds](https://en.wikipedia.org/wiki/Broadcatching#RSS+BitTorrent) using rules. This allows me to filter the episodes of the series I'm interested in (either based on keywords or by assigning a specific RSS feed to that series) and thus automatically download their torrents. It also allows me to assign categories/subcategories to these rules so they are downloaded to the desired folders.
+
+![RSS_Rules](/assets/images/posts/localmediaserver3/RSS_Rules.PNG)
+
+With that, at the start of each anime season, I simply configure the RSS feeds and their rules to automatically download the new episodes, making them available for Shoko/Jellyfin.
 
 # Unifying different folders into one
 
