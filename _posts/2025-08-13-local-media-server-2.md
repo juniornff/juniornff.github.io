@@ -201,7 +201,8 @@ Since we know our integrated graphics card is an Intel, we have the following me
 Given that my CPU/GPU is a fairly old Intel model, I will choose **VA-API**.
 
 For these video drivers to be used, they must first be installed on the system:
-```bash
+
+```console
 $ sudo apt update
 
 $ apt search va-driver
@@ -233,6 +234,7 @@ $ getent group render | cut -d: -f3
 ```
 
 For now, we can integrate the driver into the Jellyfin container by adding the necessary device mapping and group privilege to its Docker compose file:
+
 ```yaml
 services:
   jellyfin:
@@ -266,7 +268,7 @@ volumes:
 ```
 
 For the changes to take effect, we must recreate the container:
-```bash
+```console
 $ docker compose down && docker compose up -d
 ```
 
@@ -278,7 +280,7 @@ With the container now running, we can go to the Jellyfin settings to activate H
 
 The next part of the configuration is to determine which video codecs the device will be able to use. To check this, we can run the following commands:
 
-```bash
+```console
 $ vainfo 
 libva info: VA-API version 1.17.0
 libva info: Trying to open /usr/lib/x86_64-linux-gnu/dri/iHD_drv_video.so
@@ -323,7 +325,7 @@ Some settings I configured to minimize the workload during transcoding as much a
 
 Finally, we can verify how the graphics card is working using intel_gpu_top (from intel-gpu-tools):
 
-```bash
+```console
 $ sudo apt update && sudo apt install -y intel-gpu-tools
 $ sudo intel_gpu_top
 ```

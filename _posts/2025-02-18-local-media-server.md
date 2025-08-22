@@ -61,6 +61,10 @@ volumes:
   cache:
 ```
 
+We can create and start the container with the following command:
+
+`$ docker compose up -d`
+
 ![dockerjellyfin](/assets/images/posts/localmediaserver/dockerjellyfin.png)
 
 After doing the initial configuration of Jellyfin and setting up the media library, I could already access it from any device within the network with the local IP and port. This was my first achievement.
@@ -77,6 +81,27 @@ My research on how to remotely access the server led me to investigate DNS. Alth
 
 ### Dealing with ISP's dynamic IP addresses
 Even though DuckDNS made my server more accessible, my ISP regularly changes my public IP. To ensure that Duckdns always points to the correct IP, it provides several [options](https://www.duckdns.org/install.jsp) to automate the task of updating the public IP address. In the end, since I didn't want to install anything on the OS, I opted for a docker image made by the [linuxserver](https://hub.docker.com/r/linuxserver/duckdns) community.
+
+```yaml
+# docker-compose.yml
+services:
+  duckdns:
+    image: lscr.io/linuxserver/duckdns:latest
+    container_name: duckdns
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - SUBDOMAINS=juniornff.duckdns.org
+      - TOKEN=<API_TOKEN> #Get in the duckdns page
+      - UPDATE_IP=ipv4
+      - LOG_FILE=true
+    volumes:
+      - config:/config
+    restart: unless-stopped
+volumes:
+  config:
+```
 
 ![duckdns2](/assets/images/posts/localmediaserver/duckdns2.png)
 
@@ -117,7 +142,11 @@ Example:
 
 ![cloudflaretunnels](/assets/images/posts/localmediaserver/cloudflaretunnels.webp)
 
-Cloudflare provides several ways to install these tunnels, as you can imagine I chose the option of doing it through docker.
+Cloudflare provides several ways to install these tunnels, as you can imagine I chose the option of doing it through docker. In this case just a docker run will be enough:
+
+```console
+$ docker run cloudflare/cloudflared:latest tunnel --no-autoupdate run --token <TOKEN>
+```
 
 ![cloudflaretunnelinstaled](/assets/images/posts/localmediaserver/cloudflaretunnellinstaled.png)
 

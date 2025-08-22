@@ -376,10 +376,6 @@ listen-address=127.0.0.1,192.168.1.19
 address=/media.nehemiasfeliz.com/192.168.1.19
 address=/shoko.nehemiasfeliz.com/192.168.1.19
 address=/torrents.nehemiasfeliz.com/192.168.1.19
-address=/ownfoil.nehemiasfeliz.com/192.168.1.19
-address=/guacamole.nehemiasfeliz.com/192.168.1.19
-address=/smash.nehemiasfeliz.com/192.168.1.19
-address=/xlink.nehemiasfeliz.com/192.168.1.19
 
 # The main domain(Github Pages) continues to operate normally
 server=/nehemiasfeliz.com/8.8.8.8
@@ -407,7 +403,7 @@ Since we are not accessing Cloudflare we do not need to use their certificates, 
 	email juniornff@gmail.com
 	acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
 	http_port  80
-  https_port 443
+	https_port 443
 	ocsp_stapling off
 }
 
