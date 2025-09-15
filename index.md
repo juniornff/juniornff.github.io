@@ -18,4 +18,4 @@ Software Engineer and Software Developer with Problems Resolution skills. Fast l
 # Projects
 
 * [Local media Server](/posts/local-media-server)
-* * Updates: [2do Part](/posts/local-media-server-2), [3rd Part](/posts/local-media-server-3)
+    * Updates: [2do Part](/posts/local-media-server-2), [3rd Part](/posts/local-media-server-3)
