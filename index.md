@@ -5,11 +5,11 @@ permalink: /
 ---
 # Bio
 
-<img src="/assets/photo.JPG" width="30%" height="30%">
+<img src="/assets/photo.jpeg" width="30%" height="30%">
 
 Software Engineer and Software Developer with Problems Resolution skills. Fast learner. Appeal to assist in providing solutions in several areas, such as Software development and Technical support. Open source and self-hosting enthusiast([Personal Projects](#projects)).
 
-[CV](/assets/Nehemias%20Feliz%20CV8.pdf)
+[CV](/assets/Nehemias%20Feliz%20CV8%20ENG.pdf)
 
 ### Social Media
 
