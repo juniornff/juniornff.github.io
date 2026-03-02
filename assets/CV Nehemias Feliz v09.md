@@ -21,7 +21,7 @@
 
 **Link: [https://smash.nehemiasfeliz.com/](https://smash.nehemiasfeliz.com/)** 
 
-* **Container Architecture:** Orchestrated a multi-container environment using **Docker Compose**, decoupling application logic **(Python/Flask)** from data persistence **(SQLite)** to ensure parity between development and production environments.  
+* **Container Architecture:** Orchestrated a multi-container environment using **Docker Compose**, decoupling application logic **(Python/Flask)** from data persistence **(SQLite)** to ensure parity between development and production environments and CI/CD Pipeline with GitHub Actions.  
 * **Complex Business Logic:** Engineered a tournament engine implementing algorithms for bracket management, player registration, and real-time match result validation.  
 * **Data Modeling:** Designed a relational database structure to handle complex relationships between users, tournaments, and combat statistics, utilizing models.py to enforce data integrity.
 
